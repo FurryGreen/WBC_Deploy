@@ -18,8 +18,8 @@ lc = lcm.LCM("udpm://239.255.76.67:7667?ttl=255")
 
 def load_and_run_policy():
     # load trained policy
-    # ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/deploy.onnx"
-    ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/mydeploy.onnx"
+    ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/deploy.onnx"
+    # ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/mydeploy.onnx"
 
     se = StateEstimator(lc)
 
