@@ -2,6 +2,12 @@
 
 In this repo, we use an apple vision pro to control upper body of Unitree g1, and use `Homie` Algorithm to control lower body.
 
+![](demo1.gif)
+
+![](demo2.gif)
+
+![](demo3.gif)
+
 ## 👏 Acknowledgements
 
 - [OpenHomie](https://github.com/OpenRobotLab/OpenHomie/tree/main/HomieDeploy): Our robot deployment code is based on `OpenHomie`.
