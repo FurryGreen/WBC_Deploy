@@ -2,7 +2,7 @@
 
 In this repo, we use an apple vision pro to control upper body of Unitree g1, and use `Homie` Algorithm to control lower body.
 
-![](demos.gif)
+![](demos_all.gif)
 
 
 ## 👏 Acknowledgements
