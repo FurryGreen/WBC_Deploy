@@ -1,69 +1,67 @@
 <div align="center">
   <h1 align="center"> Unitree G1 WBC Deploy </h1>
 
-
-[中文](README.md) | [English](README_EN.md)
+[English](README.md) | [中文](README_CN.md) 
 
 
 </div>
 
 ---
 
-> **一个基于 Apple Vision Pro 的机器人远程操控与数据采集系统**
+> **An Apple Vision Pro-based Robot Teleoperation and Data Collection System**
 
-本项目实现了对 Unitree G1 机器人的全身控制：使用 Apple Vision Pro 结合 [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate) 控制机器人上半身，使用 [OpenHomie](https://github.com/OpenRobotLab/OpenHomie) 算法控制下半身运动。同时支持**全身数据采集**功能。
+This project implements whole-body control for the Unitree G1 robot: using Apple Vision Pro with [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate) to control the robot's upper body and the [OpenHomie](https://github.com/OpenRobotLab/OpenHomie) algorithm to control lower body movement. It also supports **whole-body data collection** functionality.
 
 ![Demo](demos_all.gif)
 
-## 🚀 功能特性
+## 🚀 Key Features
 
-- **双模式控制**: 上半身远程操控 + 下半身自主行走
-- **实时控制**: 基于 Apple Vision Pro 的低延迟控制
-- **全身数据采集**: 支持完整的机器人动作数据收集
-- **模块化设计**: 可独立部署上半身或下半身控制
-- **跨平台通信**: TCP/IP 网络通信架构
+- **Dual-mode Control**: Upper body teleoperation + Lower body autonomous locomotion
+- **Real-time Control**: Low-latency control based on Apple Vision Pro
+- **Whole-body Data Collection**: Complete robot motion data collection support
+- **Modular Design**: Independent deployment of upper or lower body control
+- **Cross-platform Communication**: TCP/IP network communication architecture
 
-## 📋 TODO 计划
+## 📋 TODO List
 
-我们计划在未来版本中支持以下功能：
+We plan to support the following features in future versions:
 
-- [ ] **数据格式转换**: 将采集数据转换为 LeRobot 格式
-- [ ] **AI 训练集成**: 支持训练 NVIDIA GR00T 等先进 VLA 模型
+- [ ] **Data Format Conversion**: Convert collected data to LeRobot format
+- [ ] **AI Training Integration**: Support training NVIDIA GR00T and other advanced VLA models
 
+## 🤖 Future AI Training Pipeline
 
-## 🤖 未来 AI 训练流程
+We plan to implement a complete data collection to AI training pipeline:
 
-我们计划实现完整的数据收集到AI训练的流程：
+1. **Data Collection**: Use this system to collect whole-body motion data ✅ *Implemented*
+2. **Format Conversion**: Use [any4lerobot](https://github.com/Tavish9/any4lerobot) to convert data to LeRobot format 🚧 *In Development*
+3. **Model Training**: Use [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T) to train full-body mobile manipulation models 📋 *Planned*
 
-1. **数据采集**: 使用本系统进行全身动作数据收集 ✅ *已实现*
-2. **格式转换**: 利用 [any4lerobot](https://github.com/Tavish9/any4lerobot) 将数据转换为 LeRobot 格式 🚧 *开发中*
-3. **模型训练**: 使用 [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T) 训练全身移动操作模型 📋 *计划中*
+### Related Projects
 
-### 相关项目
+- 🛠️ **[any4lerobot](https://github.com/Tavish9/any4lerobot)**: Collection of utilities for LeRobot, supporting multiple data format conversions
+- 🧠 **[NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T)**: World's first open foundation model for generalized humanoid robot reasoning and skills
 
-- 🛠️ **[any4lerobot](https://github.com/Tavish9/any4lerobot)**: LeRobot 工具集合，支持多种数据格式转换
-- 🧠 **[NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T)**: 世界首个开源的通用人形机器人基础模型
+## 📋 System Requirements
 
-## 📋 系统要求
-
-### 硬件要求
-- Unitree G1 机器人
-- Dex-3 灵巧手（可选）
+### Hardware Requirements
+- Unitree G1 Robot
+- Dex-3 Dexterous Hand (optional)
 - Apple Vision Pro
-- 开发主机（Linux 推荐，支持 CUDA）
+- Development Host (Linux recommended, CUDA support)
 
-### 软件要求
+### Software Requirements
 - Python 3.8+
 - CMake 3.16+
-- GCC/G++ 支持 C++14
+- GCC/G++ with C++14 support
 - Unitree SDK2
-- LeRobot（用于数据转换和训练）
+- LeRobot (for data conversion and training)
 
-## 🏗️ 安装步骤
+## 🏗️ Installation Steps
 
-### 1. 编译 Unitree SDK2
+### 1. Compile Unitree SDK2
 
-用于机器人控制，需要编译 `g1_control.cpp` (Unitree G1) 和 `hand_control.cpp` (Dex-3)：
+For robot control, you need to compile `g1_control.cpp` (Unitree G1) and `hand_control.cpp` (Dex-3):
 
 ```bash
 cd unitree_sdk2
@@ -73,135 +71,134 @@ cmake ..
 make
 ```
 
-编译完成后，可执行文件将位于 `unitree_sdk2/build/bin` 目录下。
+After compilation, executable files will be located in `unitree_sdk2/build/bin`.
 
-### 2. 安装 g1_gym_deploy
+### 2. Install g1_gym_deploy
 
 ```bash
 cd g1_gym_deploy && pip install -e .
 ```
 
-### 3. 安装 LeRobot（可选，用于数据转换和训练）
+### 3. Install LeRobot (optional, for data conversion and training)
 
 ```bash
 pip install lerobot
 ```
 
-## ⚙️ 网络配置
+## ⚙️ Network Configuration
 
-### 确定 IP 地址
+### Determine IP Addresses
 
-在机器人和PC上分别运行以下命令获取IP地址：
+Run the following command on both robot and PC to get IP addresses:
 
 ```bash
 ifconfig | grep inet
 ```
 
-### 配置网络地址
+### Configure Network Addresses
 
-请在代码中将 IP 地址设置为正确的值，确保机器人和PC能够正常通信。
+Please set the IP addresses in the code to the correct values to ensure proper communication between robot and PC.
 
-## 🎮 部署流程
+## 🎮 Deployment Process
 
-### 预备步骤
+### Preparation Steps
 
-⚠️ **重要**: 部署前请按顺序执行以下操作关闭G1的初始控制进程：
+⚠️ **Important**: Before deployment, please execute the following operations in sequence to close G1's initial control process:
 
 1. `L1 + A` 
 2. `L2 + R2`
-3. `L2 + A` （成功后机器人会抬起手臂）
-4. `L2 + B` （成功后机器人失去力控）
+3. `L2 + A` (Robot will raise its arms upon success)
+4. `L2 + B` (Robot will lose force control upon success)
 
-### 机器人端操作
+### Robot-side Operations
 
-#### 终端 1: 启动机器人控制程序
+#### Terminal 1: Start Robot Control Program
 ```bash
 cd unitree_sdk2/build/bin && ./g1_control eth0
-# 如果 eth0 不工作，请尝试 eth1
+# If eth0 doesn't work, try eth1
 ```
 
-#### 终端 2: 启动策略推理线程
+#### Terminal 2: Start Policy Inference Thread
 ```bash
 python g1_gym_deploy/scripts/deploy_policy.py
 ```
 
-#### 终端 3: 启动图像服务器（AVP 模式）
+#### Terminal 3: Start Image Server (AVP Mode)
 ```bash
 cd avp_teleoperate/teleop/image_server
 python image_server.py
 ```
 
-### 机器人操作
+### Robot Operations
 
-1. 将机器人放置在地面上
-2. 按下手柄的 `R2` 键使机器人站立
-3. 再次按下 `R2` 键开始控制
+1. Place the robot on the ground
+2. Press the `R2` button on the controller to make the robot stand
+3. Press `R2` again to start control
 
-## 📱 Apple Vision Pro 操控与数据采集
+## 📱 Apple Vision Pro Control & Data Collection
 
-### PC 端操作
+### PC-side Operations
 
 ```bash
-# 启动 G1 (29DoF) 机器人 + Dex3-1 灵巧手控制
+# Start G1 (29DoF) Robot + Dex3-1 Dexterous Hand control
 cd avp_teleoperate/teleop
 python teleop_data_collecting.py --arm=G1_29 --hand=dex3 --record
 ```
 
-**参数说明:**
-- `--arm=G1_29`: 机器人手臂类型（默认值，可省略）
-- `--hand=dex3`: 灵巧手类型
-- `--record`: 启用数据记录功能
+**Parameter Description:**
+- `--arm=G1_29`: Robot arm type (default value, can be omitted)
+- `--hand=dex3`: Dexterous hand type
+- `--record`: Enable data recording functionality
 
-### 数据采集说明
+### Data Collection Description
 
-本系统对 AVP 进行了魔改，支持完整的全身数据采集功能：
+This system has modified AVP to support complete whole-body data collection:
 
-- 📹 **视觉数据**: 多角度相机画面采集
-- 🎯 **动作数据**: 完整的关节角度和末端执行器位置
-- 🤖 **状态数据**: 机器人姿态、速度、力矩等
-- 🕐 **时序同步**: 所有数据流精确时间同步
-
-
+- 📹 **Visual Data**: Multi-angle camera feed collection
+- 🎯 **Action Data**: Complete joint angles and end-effector positions
+- 🤖 **State Data**: Robot pose, velocity, torque, etc.
+- 🕐 **Temporal Synchronization**: Precise time synchronization across all data streams
 
 
 
-## ⚠️ 安全注意事项
 
-- **🔴 警告**: 请在充分理解所有文件功能后再进行实际部署
-- 首次部署建议在安全的开放环境中进行测试
-- 确保周围有足够的安全空间
-- 建议有经验人员在场指导
-- 随时准备紧急停止按钮
 
-## 📁 项目结构
+## ⚠️ Safety Precautions
+
+- **🔴 Warning**: Please deploy the system only after fully understanding all file functions
+- First deployment should be tested in a safe, open environment
+- Ensure sufficient safety space around
+- Recommend experienced personnel supervision
+- Keep emergency stop button ready
+
+## 📁 Project Structure
 
 ```
 WBC_Deploy/
-├── avp_teleoperate/          # Apple Vision Pro 远程操控（魔改版，支持数据采集）
-├── OpenHomie/                # 下半身控制算法
+├── avp_teleoperate/          # Apple Vision Pro teleoperation (modified version with data collection)
+├── OpenHomie/                # Lower body control algorithm
 ├── unitree_sdk2/             # Unitree SDK2
-├── g1_gym_deploy/            # 部署脚本
-├── data/                     # 数据采集存储目录
-└── README.md                 # 本文档
+├── g1_gym_deploy/            # Deployment scripts
+├── data/                     # Data collection storage directory
+└── README.md                 # This document
 ```
 
 
 
-## 👏 致谢
+## 👏 Acknowledgements
 
-- [OpenHomie](https://github.com/OpenRobotLab/OpenHomie/tree/main/HomieDeploy): 机器人部署代码基于 OpenHomie 开发
-- [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate): 上半身控制使用了 avp_teleoperate 库
-- [any4lerobot](https://github.com/Tavish9/any4lerobot): 数据格式转换工具
-- [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T): AI 模型训练框架
-- [LeRobot](https://github.com/huggingface/lerobot): 机器人学习框架
+- [OpenHomie](https://github.com/OpenRobotLab/OpenHomie/tree/main/HomieDeploy): Robot deployment code based on OpenHomie
+- [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate): Upper body control using avp_teleoperate library
+- [any4lerobot](https://github.com/Tavish9/any4lerobot): Data format conversion tools
+- [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T): AI model training framework
+- [LeRobot](https://github.com/huggingface/lerobot): Robot learning framework
 
-## 📜 许可证
+## 📜 License
 
-请查看相关子项目的许可证条款。
+Please refer to the license terms of the related sub-projects.
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎提交 Issue 和 Pull Request 来改进本项目。
+Welcome to submit Issues and Pull Requests to improve this project.
 
-
-
+ 
