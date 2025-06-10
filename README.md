@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 align="center"> Unitree G1 WBC Deploy </h1>
+  <h1 align="center"> Unitree G1 OpenWBC </h1>
 
 [English](README.md) | [中文](README_CN.md) 
 
