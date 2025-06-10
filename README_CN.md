@@ -13,6 +13,8 @@
 
 本项目实现了对 Unitree G1 机器人的全身控制：使用 Apple Vision Pro 结合 [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate) 控制机器人上半身，使用 [OpenHomie](https://github.com/OpenRobotLab/OpenHomie) 算法控制下半身运动。同时支持**全身数据采集**功能。
 
+🎥 **[演示视频](https://www.bilibili.com/video/BV1z9MgzvEfG/?share_source=copy_web&vd_source=efe265cb01f5aed575de3008c501cfe7)**
+
 ![Demo](demos_all.gif)
 
 ## 🚀 功能特性
