@@ -1,0 +1,3 @@
+[submodule "OpenWBC_to_Lerobot"]
+	path = OpenWBC_to_Lerobot
+	url = https://github.com/JimmyPang02/OpenWBC_to_Lerobot.git
