@@ -177,11 +177,12 @@ This system has modified AVP to support complete whole-body data collection:
 
 ```
 WBC_Deploy/
-├── avp_teleoperate/          # Apple Vision Pro teleoperation (modified version with data collection)
+├── avp_teleoperate/          # Apple Vision Pro teleoperation 
 ├── OpenHomie/                # Lower body control algorithm
-├── unitree_sdk2/             # Unitree SDK2
-├── g1_gym_deploy/            # Deployment scripts
-├── data/                     # Data collection storage directory
+│   └── HomieDeploy/          # Deployment package
+│       ├── unitree_sdk2/     # Unitree SDK2
+│       └── g1_gym_deploy/    # Deployment scripts
+├── demos_all.gif            # Demo animation
 └── README.md                 # This document
 ```
 

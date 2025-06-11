@@ -179,11 +179,12 @@ python teleop_data_collecting.py --arm=G1_29 --hand=dex3 --record
 
 ```
 WBC_Deploy/
-├── avp_teleoperate/          # Apple Vision Pro 远程操控（魔改版，支持数据采集）
+├── avp_teleoperate/          # Apple Vision Pro 远程操控
 ├── OpenHomie/                # 下半身控制算法
-├── unitree_sdk2/             # Unitree SDK2
-├── g1_gym_deploy/            # 部署脚本
-├── data/                     # 数据采集存储目录
+│   └── HomieDeploy/          # 部署包
+│       ├── unitree_sdk2/     # Unitree SDK2
+│       └── g1_gym_deploy/    # 部署脚本
+├── demos_all.gif            # 演示动画
 └── README.md                 # 本文档
 ```
 
