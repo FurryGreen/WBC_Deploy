@@ -8,7 +8,7 @@
 
 ---
 
-> **An Apple Vision Pro-based Robot Teleoperation and Data Collection System**
+> **An XR-based Robot Teleoperation and Data Collection System**
 
 This project implements whole-body control for the Unitree G1 robot: using Apple Vision Pro with [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate) to control the robot's upper body and the [OpenHomie](https://github.com/OpenRobotLab/OpenHomie) algorithm to control lower body movement. It also supports **whole-body data collection** functionality.
 
