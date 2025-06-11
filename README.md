@@ -28,7 +28,7 @@ This project implements whole-body control for the Unitree G1 robot: using Apple
 
 We plan to support the following features in future versions:
 
-- [ ] **Data Format Conversion**: Convert collected data to LeRobot format
+- [x] **Data Format Conversion**: Convert collected data to LeRobot format (Available in [OpenWBC_to_Lerobot](./OpenWBC_to_Lerobot) submodule)
 - [ ] **AI Training Integration**: Support training NVIDIA GR00T and other advanced VLA models
 
 ## 🤖 Future AI Training Pipeline
@@ -36,7 +36,7 @@ We plan to support the following features in future versions:
 We plan to implement a complete data collection to AI training pipeline:
 
 1. **Data Collection**: Use this system to collect whole-body motion data ✅ *Implemented*
-2. **Format Conversion**: Use [any4lerobot](https://github.com/Tavish9/any4lerobot) to convert data to LeRobot format 🚧 *In Development*
+2. **Format Conversion**: Use [OpenWBC_to_Lerobot](./OpenWBC_to_Lerobot) to convert data to LeRobot format ✅ *Implemented*
 3. **Model Training**: Use [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T) to train full-body mobile manipulation models 📋 *Planned*
 
 ### Related Projects
@@ -85,6 +85,19 @@ cd g1_gym_deploy && pip install -e .
 
 ```bash
 pip install lerobot
+```
+
+### 4. Initialize Data Conversion Submodule
+
+For data format conversion functionality:
+
+```bash
+# Initialize and update submodule
+git submodule update --init --recursive
+
+# Install the data converter
+cd OpenWBC_to_Lerobot
+pip install -e .
 ```
 
 ## ⚙️ Network Configuration
@@ -161,6 +174,27 @@ This system has modified AVP to support complete whole-body data collection:
 - 🤖 **State Data**: Robot pose, velocity, torque, etc.
 - 🕐 **Temporal Synchronization**: Precise time synchronization across all data streams
 
+## 🔄 Data Format Conversion
+
+Convert collected OpenWBC data to LeRobot format using the included converter:
+
+```bash
+cd OpenWBC_to_Lerobot
+
+# Basic conversion
+python convert_to_lerobot.py \
+    --input_dir /path/to/openwbc/dataset \
+    --output_dir ./lerobot_dataset \
+    --dataset_name "pick_cola" \
+    --robot_type "g1" \
+    --fps 30
+
+# Or use the installed command
+wbc-convert --input_dir /path/to/dataset --output_dir ./output
+```
+
+For detailed usage instructions, see the [OpenWBC_to_Lerobot README](./OpenWBC_to_Lerobot/README.md).
+
 
 
 
@@ -182,6 +216,11 @@ WBC_Deploy/
 │   └── HomieDeploy/          # Deployment package
 │       ├── unitree_sdk2/     # Unitree SDK2
 │       └── g1_gym_deploy/    # Deployment scripts
+├── OpenWBC_to_Lerobot/       # Data format conversion tools (submodule)
+│   ├── convert_to_lerobot.py # Main conversion script
+│   ├── modality.json         # Robot modality configuration
+│   ├── requirements.txt      # Python dependencies
+│   └── README.md             # Conversion tool documentation
 ├── demos_all.gif            # Demo animation
 └── README.md                 # This document
 ```
