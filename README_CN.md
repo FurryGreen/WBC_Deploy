@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 align="center"> Unitree G1 OpenWBC </h1>
+  <h1 align="center"> OpenWBC </h1>
 
 
 [English](README.md) | [中文](README_CN.md) 
@@ -9,7 +9,7 @@
 
 ---
 
-> **一个基于 Apple Vision Pro 的机器人远程操控与数据采集系统**
+> **一个基于 XR 的机器人远程操控与数据采集系统**
 
 本项目实现了对 Unitree G1 机器人的全身控制：使用 Apple Vision Pro 结合 [avp_teleoperate](https://github.com/unitreerobotics/avp_teleoperate) 控制机器人上半身，使用 [OpenHomie](https://github.com/OpenRobotLab/OpenHomie) 算法控制下半身运动。同时支持**全身数据采集**功能。
 
@@ -29,7 +29,7 @@
 
 我们计划在未来版本中支持以下功能：
 
-- [ ] **数据格式转换**: 将采集数据转换为 LeRobot 格式
+- [x] **数据格式转换**: 将采集数据转换为 LeRobot 格式（在 [OpenWBC_to_Lerobot](https://github.com/JimmyPang02/OpenWBC_to_Lerobot/tree/main) 子模块中可用）
 - [ ] **AI 训练集成**: 支持训练 NVIDIA GR00T 等先进 VLA 模型
 
 
@@ -38,7 +38,7 @@
 我们计划实现完整的数据收集到AI训练的流程：
 
 1. **数据采集**: 使用本系统进行全身动作数据收集 ✅ *已实现*
-2. **格式转换**: 利用 [any4lerobot](https://github.com/Tavish9/any4lerobot) 将数据转换为 LeRobot 格式 🚧 *开发中*
+2. **格式转换**: 利用 [OpenWBC_to_Lerobot](https://github.com/JimmyPang02/OpenWBC_to_Lerobot/tree/main) 将数据转换为 LeRobot 格式 ✅ *已实现*
 3. **模型训练**: 使用 [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T) 训练全身移动操作模型 📋 *计划中*
 
 ### 相关项目
@@ -87,6 +87,19 @@ cd g1_gym_deploy && pip install -e .
 
 ```bash
 pip install lerobot
+```
+
+### 4. 初始化数据转换子模块
+
+用于数据格式转换功能：
+
+```bash
+# 初始化并更新子模块
+git submodule update --init --recursive
+
+# 安装数据转换器
+cd OpenWBC_to_Lerobot
+pip install -e .
 ```
 
 ## ⚙️ 网络配置
@@ -163,9 +176,26 @@ python teleop_data_collecting.py --arm=G1_29 --hand=dex3 --record
 - 🤖 **状态数据**: 机器人姿态、速度、力矩等
 - 🕐 **时序同步**: 所有数据流精确时间同步
 
+## 🔄 数据格式转换
 
+使用内置的转换器将收集的 OpenWBC 数据转换为 LeRobot 格式：
 
+```bash
+cd OpenWBC_to_Lerobot
 
+# 基本转换
+python convert_to_lerobot.py \
+    --input_dir /path/to/openwbc/dataset \
+    --output_dir ./lerobot_dataset \
+    --dataset_name "pick_cola" \
+    --robot_type "g1" \
+    --fps 30
+
+# 或使用安装的命令
+wbc-convert --input_dir /path/to/dataset --output_dir ./output
+```
+
+详细使用说明请参见 [OpenWBC_to_Lerobot README](https://github.com/JimmyPang02/OpenWBC_to_Lerobot/tree/main/README.md)。
 
 ## ⚠️ 安全注意事项
 
@@ -184,6 +214,11 @@ WBC_Deploy/
 │   └── HomieDeploy/          # 部署包
 │       ├── unitree_sdk2/     # Unitree SDK2
 │       └── g1_gym_deploy/    # 部署脚本
+├── OpenWBC_to_Lerobot/       # 数据格式转换工具（子模块）
+│   ├── convert_to_lerobot.py # 主转换脚本
+│   ├── modality.json         # 机器人模态配置
+│   ├── requirements.txt      # Python 依赖
+│   └── README.md             # 转换工具文档
 ├── demos_all.gif            # 演示动画
 └── README.md                 # 本文档
 ```
