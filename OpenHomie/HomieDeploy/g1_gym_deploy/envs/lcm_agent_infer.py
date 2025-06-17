@@ -43,11 +43,11 @@ def zmq_listener():
 
 
 class LCMAgent():
-    def __init__(self, se:StateEstimator, command_profile: RCControllerProfile, own_policy:bool = False):
+    def __init__(self, se:StateEstimator, command_profile: RCControllerProfile, own_policy:bool = False, debug:bool = True):
         self.se = se
         self.command_profile = command_profile
 
-        self.dt = 1/50
+        self.dt = 1/50 #1/30 #1/50
         self.timestep = 0
 
         self.num_envs = 1
@@ -58,6 +58,7 @@ class LCMAgent():
         self.num_commands = 4
         self.device = 'cuda:0'
         self.own_policy = own_policy
+        self.debug = debug
         
         self.default_dof_pos = np.array([-0.1000,  0.0000,  0.0000,  0.3000, -0.2000,  0.0000, -0.1000,  0.0000,
          0.0000,  0.3000, -0.2000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
@@ -93,6 +94,7 @@ class LCMAgent():
         self.socket.bind("tcp://*:5557")  # 绑定到端口
         
         self.current_q_cmd = None
+        self.prev_command = None
         self.current_arm_command = np.zeros(14)
         self.current_base_command = np.zeros(4)
         self.act_step = 0
@@ -111,21 +113,39 @@ class LCMAgent():
         
     def get_current_q_command(self):
         with data_lock:
-            self.current_q_cmd = latest_cmd.copy() if latest_cmd is not None else {}
+            self.current_q_cmd = latest_cmd.copy() if latest_cmd is not None else None
         if self.current_q_cmd is not None:
             ### 解析
-            self.current_arm_command = np.atleast_1d(self.current_q_cmd['arm_action'][self.act_step])
-            self.current_base_command = np.atleast_1d(self.current_q_cmd['base_action'][self.act_step])
+            if self.debug:
+                # print(f"[GR00T Start] Current command: {self.current_q_cmd}")
+                # print('arm cmd shape:', np.atleast_1d(self.current_q_cmd['arm_action'][self.act_step]).shape)
+                # self.current_arm_command = self.default_dof_pos[13:]
+                # print('base cmd shape:', np.atleast_1d(self.current_q_cmd['base_action'][self.act_step]).shape)
+                self.current_arm_command = np.atleast_1d(self.current_q_cmd['arm_action'][self.act_step])
+                self.current_base_command = np.atleast_1d(self.current_q_cmd['base_action'][self.act_step])
+            else:
+                self.current_arm_command = np.atleast_1d(self.current_q_cmd['arm_action'][self.act_step])
+                self.current_base_command = np.atleast_1d(self.current_q_cmd['base_action'][self.act_step])
             self.act_step += 1
-            if self.act_step == 16:
-                self.act_step = 0
+            if self.act_step == 15:
                 flag=1
             else:
                 flag=0
-                
+
+            #print('self.act_step:', self.act_step)
+            
+            if self.act_step > 15:
+                self.act_step = 15
+                print('Gr00t too slow')
+
+            if self.current_q_cmd != self.prev_command:
+                print('Difference Reset')
+                self.act_step = 0
+
+            self.prev_command = self.current_q_cmd.copy()
             zmq_msg = f"infer_start {flag}"
             self.socket.send_string(zmq_msg)
-            print(f"[GR00T Start Published] {zmq_msg}")
+            #print(f"[GR00T Start Published] {zmq_msg}")
 
     def get_obs(self):
         self.gravity_vector = self.se.get_gravity_vector()
@@ -150,12 +170,12 @@ class LCMAgent():
         self.dof_vel = self.se.get_dof_vel()
         self.body_angular_vel = self.se.get_body_angular_vel()
         actions =  torch.cat((self.actions.reshape(1, -1).to("cuda:0"), torch.zeros(1, 15).to("cuda:0")), dim=-1).to("cuda:0")
-        print("commands: ", self.commands[:, :])
-        print("ang_vel: ", self.body_angular_vel)
-        print("grav: ", self.gravity_vector)
-        print("dof_pos: ", self.dof_pos)
-        print("dof_vel: ", self.dof_vel)
-        print("action: ", actions)
+        # print("commands: ", self.commands[:, :])
+        # print("ang_vel: ", self.body_angular_vel)
+        # print("grav: ", self.gravity_vector)
+        # print("dof_pos: ", self.dof_pos)
+        # print("dof_vel: ", self.dof_vel)
+        # print("action: ", actions)
         ob = np.concatenate((self.commands[:, :] * np.array([2.0, 2.0, 0.25, 1.0]), # 4
                              self.body_angular_vel.reshape(1, -1) * 0.5, # 3
                              self.gravity_vector.reshape(1, -1), # 3
@@ -174,7 +194,7 @@ class LCMAgent():
         current_sol_q = self.current_arm_command.copy() if self.current_q_cmd is not None else None
 
         if current_sol_q is not None:
-            print(f"[50Hz Loop] Using sol_q: {current_sol_q}")
+            #print(f"[50Hz Loop] Using sol_q: {current_sol_q}")
             self.joint_pos_target[15:] = current_sol_q
         else:
             print("[50Hz Loop] No data yet, waiting...")

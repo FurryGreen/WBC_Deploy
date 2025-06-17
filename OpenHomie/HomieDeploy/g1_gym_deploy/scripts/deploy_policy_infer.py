@@ -16,7 +16,7 @@ import os
 
 lc = lcm.LCM("udpm://239.255.76.67:7667?ttl=255")
 
-def load_and_run_policy(own_policy=False):
+def load_and_run_policy(own_policy=False, debug=True):
     # load trained policy
     ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/deploy.onnx"
     # ckpt_path = "/home/unitree/OpenHomie/HomieDeploy/mydeploy.onnx"
@@ -26,7 +26,7 @@ def load_and_run_policy(own_policy=False):
     control_dt = 1/50
     command_profile = RCControllerProfile(dt=control_dt, state_estimator=se)
 
-    hardware_agent = LCMAgent(se, command_profile, own_policy)
+    hardware_agent = LCMAgent(se, command_profile, own_policy, debug)
     se.spin()
 
     from envs.history_wrapper import HistoryWrapper
@@ -55,5 +55,6 @@ def load_onnx_policy(path):
 
 
 if __name__ == '__main__':
-    own_policy = False
-    load_and_run_policy(own_policy)
+    own_policy = True
+    debug = True
+    load_and_run_policy(own_policy, debug)
